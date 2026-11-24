@@ -1,0 +1,120 @@
+{
+  "market_weights": {
+    "TECH": 0.3,
+    "BANK": 0.25,
+    "ENERGY": 0.2,
+    "HEALTH": 0.15,
+    "GOLD": 0.1
+  },
+  "equilibrium_excess_returns": {
+    "TECH": 0.0309,
+    "BANK": 0.0413,
+    "ENERGY": 0.0244,
+    "HEALTH": 0.024,
+    "GOLD": 0.011
+  },
+  "view": "TECH excess return minus ENERGY excess return equals 4 percentage points",
+  "risk_free_rate": 0.02,
+  "results": {
+    "confidence_0.0": {
+      "posterior_excess_returns": {
+        "TECH": 0.0309,
+        "BANK": 0.0413,
+        "ENERGY": 0.0244,
+        "HEALTH": 0.024,
+        "GOLD": 0.011
+      },
+      "weights": {
+        "TECH": 0.3,
+        "BANK": 0.25,
+        "ENERGY": 0.2,
+        "HEALTH": 0.15,
+        "GOLD": 0.1
+      },
+      "view_spread": 0.0065
+    },
+    "confidence_0.25": {
+      "posterior_excess_returns": {
+        "TECH": 0.035,
+        "BANK": 0.0412,
+        "ENERGY": 0.0202,
+        "HEALTH": 0.024,
+        "GOLD": 0.0111
+      },
+      "weights": {
+        "TECH": 0.363,
+        "BANK": 0.25,
+        "ENERGY": 0.137,
+        "HEALTH": 0.15,
+        "GOLD": 0.1
+      },
+      "view_spread": 0.0148
+    },
+    "confidence_1.0": {
+      "posterior_excess_returns": {
+        "TECH": 0.0475,
+        "BANK": 0.041,
+        "ENERGY": 0.0075,
+        "HEALTH": 0.0242,
+        "GOLD": 0.0114
+      },
+      "weights": {
+        "TECH": 0.53,
+        "BANK": 0.237,
+        "ENERGY": 0.0,
+        "HEALTH": 0.141,
+        "GOLD": 0.091
+      },
+      "view_spread": 0.04
+    }
+  },
+  "confidence_path": {
+    "confidence": [
+      0.0,
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      1.0
+    ],
+    "view_spread": [
+      0.00646,
+      0.00814,
+      0.00981,
+      0.01149,
+      0.01317,
+      0.01485,
+      0.01652,
+      0.0182,
+      0.01988,
+      0.02155,
+      0.02323,
+      0.02491,
+      0.02658,
+      0.02826,
+      0.02994,
+      0.03162,
+      0.03329,
+      0.03497,
+      0.03665,
+      0.03832,
+      0.04
+    ]
+  },
+  "note": "Zero confidence reproduces the market portfolio (up to numerical optimisation tolerance). Increasing confidence tilts the posterior toward the stated relative-return view; confidence one enforces the 4 percentage-point spread in this one-view demonstration."
+}

@@ -1,0 +1,20 @@
+{
+  "point_estimate": {
+    "TECH": 0.082,
+    "BANK": 0.25,
+    "ENERGY": 0.034,
+    "HEALTH": 0.21,
+    "GOLD": 0.424
+  },
+  "resampled_average": {
+    "TECH": 0.088,
+    "BANK": 0.239,
+    "ENERGY": 0.067,
+    "HEALTH": 0.209,
+    "GOLD": 0.397
+  },
+  "max_abs_weight_point": 0.424,
+  "max_abs_weight_resampled": 0.397,
+  "mean_weight_sd_across_draws": 0.107,
+  "note": "The averaged allocation is less concentrated than the point optimum in this run, while the dispersion across bootstrap draws makes the estimator's sampling sensitivity visible. This is a stability diagnostic, not a universal optimality claim for resampled weights."
+}

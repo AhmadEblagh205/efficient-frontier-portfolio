@@ -1,0 +1,60 @@
+{
+  "per_seed": [
+    {
+      "shrinkage_intensity": 0.036,
+      "oos_sharpe_sample": -0.074,
+      "oos_sharpe_ledoit": -0.072
+    },
+    {
+      "shrinkage_intensity": 0.024,
+      "oos_sharpe_sample": 1.42,
+      "oos_sharpe_ledoit": 1.416
+    },
+    {
+      "shrinkage_intensity": 0.018,
+      "oos_sharpe_sample": 0.879,
+      "oos_sharpe_ledoit": 0.875
+    },
+    {
+      "shrinkage_intensity": 0.026,
+      "oos_sharpe_sample": 0.285,
+      "oos_sharpe_ledoit": 0.285
+    },
+    {
+      "shrinkage_intensity": 0.023,
+      "oos_sharpe_sample": 0.661,
+      "oos_sharpe_ledoit": 0.662
+    },
+    {
+      "shrinkage_intensity": 0.011,
+      "oos_sharpe_sample": 0.982,
+      "oos_sharpe_ledoit": 0.982
+    },
+    {
+      "shrinkage_intensity": 0.029,
+      "oos_sharpe_sample": 0.805,
+      "oos_sharpe_ledoit": 0.795
+    },
+    {
+      "shrinkage_intensity": 0.022,
+      "oos_sharpe_sample": 1.308,
+      "oos_sharpe_ledoit": 1.294
+    },
+    {
+      "shrinkage_intensity": 0.04,
+      "oos_sharpe_sample": 0.899,
+      "oos_sharpe_ledoit": 0.899
+    },
+    {
+      "shrinkage_intensity": 0.019,
+      "oos_sharpe_sample": 0.201,
+      "oos_sharpe_ledoit": 0.193
+    }
+  ],
+  "mean": {
+    "shrinkage_intensity": 0.025,
+    "oos_sharpe_sample": 0.737,
+    "oos_sharpe_ledoit": 0.733
+  },
+  "note": "Half sample estimation, half sample evaluation. With only five assets in this synthetic experiment, the sample covariance is already stable enough that the difference is small. This does not imply the same result in a higher-dimensional or shorter-sample setting."
+}

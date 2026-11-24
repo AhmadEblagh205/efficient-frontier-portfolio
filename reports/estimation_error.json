@@ -1,0 +1,57 @@
+{
+  "provenance": "independent synthetic known-truth experiment",
+  "n_worlds": 200,
+  "risk_free_rate": 0.02,
+  "oracle_weights": [
+    0.08357975510663723,
+    0.0,
+    0.5133890275597945,
+    0.061319032746595385,
+    0.34171218458697294
+  ],
+  "oracle_true_sharpe": 0.6644458613295567,
+  "equal_weight_true_sharpe": 0.5773502691896257,
+  "rows": [
+    {
+      "years": 1,
+      "median_weight_error_both": 0.5806403305660046,
+      "median_weight_error_mean_only": 0.5752958994458643,
+      "median_weight_error_cov_only": 0.07844941457701961,
+      "median_true_sharpe_both": 0.5000000000000002,
+      "median_true_sharpe_mean_only": 0.5000000000000002,
+      "median_true_sharpe_cov_only": 0.6614563896122213,
+      "p_equal_weight_beats_sample_mvo": 0.8
+    },
+    {
+      "years": 3,
+      "median_weight_error_both": 0.5226865878720003,
+      "median_weight_error_mean_only": 0.5135291160607509,
+      "median_weight_error_cov_only": 0.04486204359017764,
+      "median_true_sharpe_both": 0.5022343824610747,
+      "median_true_sharpe_mean_only": 0.5007130155336807,
+      "median_true_sharpe_cov_only": 0.6633336599165203,
+      "p_equal_weight_beats_sample_mvo": 0.765
+    },
+    {
+      "years": 10,
+      "median_weight_error_both": 0.3775947390717271,
+      "median_weight_error_mean_only": 0.38393372827719163,
+      "median_weight_error_cov_only": 0.024159391651584962,
+      "median_true_sharpe_both": 0.575043832607683,
+      "median_true_sharpe_mean_only": 0.5778992609993263,
+      "median_true_sharpe_cov_only": 0.6641056692942372,
+      "p_equal_weight_beats_sample_mvo": 0.505
+    },
+    {
+      "years": 30,
+      "median_weight_error_both": 0.24614475544378622,
+      "median_weight_error_mean_only": 0.24391902159040219,
+      "median_weight_error_cov_only": 0.014202507354462754,
+      "median_true_sharpe_both": 0.6285909592313275,
+      "median_true_sharpe_mean_only": 0.6286402877706667,
+      "median_true_sharpe_cov_only": 0.6643383818331026,
+      "p_equal_weight_beats_sample_mvo": 0.185
+    }
+  ],
+  "interpretation": "In this stated synthetic world, expected-return estimation is the dominant source of long-only maximum-Sharpe weight error. Covariance-only error is much smaller. Equal weight is a useful sanity benchmark because sample optimisation can amplify noisy expected-return estimates."
+}

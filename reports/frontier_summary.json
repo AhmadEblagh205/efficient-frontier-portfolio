@@ -1,0 +1,14 @@
+{
+  "max_sharpe_weights": {
+    "AAA": 0.0822,
+    "BBB": 0.2497,
+    "CCC": 0.0342,
+    "DDD": 0.2097,
+    "EEE": 0.4242
+  },
+  "max_sharpe_return": 0.1784,
+  "max_sharpe_vol": 0.1024,
+  "sharpe": 1.547,
+  "min_variance_return": 0.1448,
+  "min_variance_vol": 0.0914
+}
