@@ -94,3 +94,11 @@ Because `pi` and `mu_BL` are excess returns, the ordinary `max_sharpe` routine r
 ## 7. Scenario simulation
 
 The GBM module simulates a fitted one-dimensional portfolio process with constant annual drift and volatility. It illustrates the distribution implied by those assumptions; it is not an empirical forecast or risk model for live investment decisions.
+
+
+## Notes moved from the README
+
+- At 3 years the median half-L1 weight error against the oracle is 0.523 (both estimated), 0.514 (expected returns only) and 0.045 (covariance only). True out-of-sample Sharpe: sample-optimised median 0.502, covariance-only error 0.663, oracle 0.664. Equal weight beats the sample maximum-Sharpe portfolio in 76.5% of 3-year simulations and 18.5% of 30-year simulations.
+- The bootstrap mean per-asset weight standard deviation is 0.107 in the default synthetic run. The resampled average is less concentrated than the single point estimate in that run. I use it as a stability diagnostic only.
+- Ledoit-Wolf in the default five-asset experiment: mean shrinkage intensity 0.025, out-of-sample Sharpe 0.736 (sample) against 0.733 (Ledoit-Wolf). Covariance shrinkage does not help here because covariance is not the main source of error.
+- Black-Litterman: equilibrium excess returns pi = delta Sigma w_market, with the view also in excess-return space and the posterior converted back to total returns before the optimiser subtracts the risk-free rate. The original implementation subtracted the risk-free rate twice and failed its zero-view check. At zero confidence the optimiser recovers market weights [0.30, 0.25, 0.20, 0.15, 0.10]; at full confidence the posterior enforces TECH minus ENERGY = 4 percentage points. These weights and the view are illustrative.

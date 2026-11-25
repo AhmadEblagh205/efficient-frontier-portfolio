@@ -4,131 +4,56 @@
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-Mean-variance optimisation is easy to draw and surprisingly hard to trust. This repository starts with the textbook Markowitz frontier, then turns the fragile part into the main experiment: **what happens when the expected returns and covariance matrix fed to the optimiser are only estimates?**
+I built this to see what happens to a mean-variance optimiser when the expected returns and covariance matrix it receives are only estimates. It starts from the textbook Markowitz frontier and then measures the estimation error directly.
 
-The project is an independent analytical rebuild of work I first explored in a UCL project (graded 92%). All headline results below use reproducible **synthetic / known-truth experiments**; they are not an investment track record.
+The project is an independent analytical rebuild of work I first explored in a UCL project (graded 92%). All headline results use synthetic data where the true returns and covariance are known. They are not an investment track record.
 
-## Main finding: the optimiser is mostly fighting noisy expected returns
+## What it does
 
-`src/estimation_error.py` fixes a five-asset Gaussian return world with known annual means and covariance, simulates 200 paired histories, and recomputes the long-only maximum-Sharpe portfolio after 1, 3, 10 and 30 years of daily observations.
+- Computes the long-only efficient frontier, the maximum-Sharpe and minimum-variance portfolios, the capital allocation line and an equal-weight curve (`src/frontier.py`).
+- Simulates 200 paired five-asset histories and compares estimated portfolios with the oracle (`src/estimation_error.py`).
+- Bootstraps one return history to see how much the optimal weights move (`src/resampled.py`).
+- Compares sample covariance with Ledoit-Wolf shrinkage, and runs a Black-Litterman prior and view demonstration.
+- Draws a GBM fan chart for the fitted portfolio, as a scenario illustration and not a forecast (`src/simulate.py`).
 
-It separates three cases:
+## Results
 
-1. estimate both expected returns and covariance;
-2. estimate expected returns while giving the optimiser the **true covariance**;
-3. estimate covariance while giving it the **true expected returns**.
+All results are from simulated data. The estimation-error study recomputes the long-only maximum-Sharpe portfolio after 1, 3, 10 and 30 years of daily data. At 3 years, the median half-L1 distance from the oracle weights is:
 
-![Estimation error decomposition](reports/figures/estimation_error.png)
-
-At **3 years**, the median half-L1 distance from the oracle weights is:
-
-| Inputs with estimation error | Median weight error |
+| Inputs estimated | Median weight error |
 |---|---:|
-| expected returns + covariance | **0.523** |
-| expected returns only | **0.514** |
-| covariance only | **0.045** |
+| expected returns and covariance | 0.523 |
+| expected returns only | 0.514 |
+| covariance only | 0.045 |
 
-The same pattern appears in true out-of-sample Sharpe evaluated under the known data-generating distribution: the median sample-optimised portfolio achieves **0.502**, while the covariance-only-error portfolio retains **0.663** versus an oracle **0.664**.
+Evaluated under the true distribution, the median sample-optimised portfolio has a Sharpe ratio of 0.502. The covariance-only portfolio reaches 0.663 against 0.664 for the oracle. An equal-weight portfolio beats the sample maximum-Sharpe portfolio in 76.5% of the 3-year simulations, and in 18.5% with 30 years of data. Most of the error in this setup comes from the expected returns.
 
-A deliberately boring **1/N portfolio** is therefore a useful sanity check. In this stated synthetic world it beats the sample maximum-Sharpe portfolio in **76.5% of the 3-year simulations**. With 30 years of data that falls to **18.5%** as the expected-return estimates become more informative.
+- The bootstrap gives a mean per-asset weight standard deviation of 0.107.
+- Ledoit-Wolf shrinkage intensity is small (mean 0.025). The out-of-sample Sharpe ratio is 0.736 for sample covariance and 0.733 for Ledoit-Wolf.
+- With zero confidence in the Black-Litterman view the optimiser recovers the stated market weights. With full confidence the posterior enforces the stated view.
 
-The point is not that equal weight is universally optimal. It is that optimisation can magnify noisy inputs, and expected-return estimation is the dominant source of error in this benchmark.
+Figures are in `reports/figures/` and the numbers are in `reports/*.json`.
 
-## Bootstrap instability: one history, many “optimal” weights
-
-`src/resampled.py` bootstraps the same return history and refits the maximum-Sharpe portfolio on each draw. The mean per-asset standard deviation of the weights is **0.107** in the default synthetic run. The resampled average is less concentrated than the single point estimate in that run, but this is used as a **stability diagnostic**, not as a universal claim that bootstrap-averaged weights are optimal.
-
-![Resampled weights](reports/figures/resampled_weights.png)
-
-## The textbook frontier is still here
-
-`src/frontier.py` implements:
-
-- annualised expected returns and covariance from log returns;
-- 4,000 random long-only portfolios;
-- the constrained efficient frontier;
-- maximum-Sharpe and global-minimum-variance portfolios;
-- the capital allocation line;
-- an equal-weight diversification curve.
-
-![Efficient frontier](reports/figures/efficient_frontier.png)
-
-`src/simulate.py` adds a GBM fan chart for the fitted portfolio. It is a **model-based scenario illustration**, not a forecast.
-
-## Two regularisation ideas — and what they actually fix
-
-### Ledoit-Wolf covariance shrinkage
-
-`src/shrinkage.py` compares the sample covariance with Ledoit-Wolf covariance shrinkage using a half-sample estimate / half-sample evaluation. In the default five-asset synthetic experiment the shrinkage intensity is small (**mean 0.025**) and the mean out-of-sample Sharpe difference is negligible (**0.736 sample covariance vs 0.733 Ledoit-Wolf**).
-
-That negative result is useful: in this small-universe experiment, covariance shrinkage does not rescue the optimiser because covariance estimation is not the main failure mode. The known-truth benchmark above makes the expected-return problem explicit.
-
-### Black-Litterman return shrinkage
-
-`src/black_litterman.py` now keeps the accounting straight:
-
-- reverse optimisation gives equilibrium **excess returns** `pi = delta Σ w_market`;
-- the view is also expressed in excess-return space;
-- the posterior is converted back to total expected returns before the ordinary Sharpe optimiser subtracts the risk-free rate.
-
-This fixes a subtle but important bug in the original implementation, which subtracted the risk-free rate twice from equilibrium excess returns and therefore failed its own supposed zero-view sanity check.
-
-The corrected implementation satisfies both limits:
-
-- **0 confidence:** the posterior reproduces the equilibrium returns and the optimiser recovers the stated market weights `[0.30, 0.25, 0.20, 0.15, 0.10]` (within numerical tolerance);
-- **100% confidence:** the posterior enforces the stated relative view, `TECH − ENERGY = 4 percentage points`.
-
-![Black-Litterman confidence path](reports/figures/black_litterman_confidence.png)
-
-This is a prior-and-view demonstration, not a claim that the chosen market weights or view are empirical truths.
-
-## Usage
+## How to run
 
 ```bash
 pip install -r requirements.txt
 
-# textbook frontier on reproducible synthetic data
 python src/frontier.py --synthetic
-
-# estimation-error benchmark (200 known-truth worlds)
 python src/estimation_error.py --worlds 200
-
-# bootstrap allocation stability
 python src/resampled.py --draws 300
-
-# covariance-shrinkage experiment
 python src/shrinkage.py --synthetic
-
-# Black-Litterman prior/view path
 python src/black_litterman.py
-
-# scenario fan chart
 python src/simulate.py --synthetic --horizon 252 --paths 2000
-```
 
-The frontier can also use a local price CSV or download ticker prices via `yfinance`. The committed analytical results and figures use synthetic data so the repository remains reproducible offline.
-
-## Tests
-
-```bash
 pytest -q
 ```
 
-The suite checks portfolio constraints, frontier target returns, Ledoit-Wolf covariance validity, bootstrap variability, Black-Litterman limit behaviour, and the known-truth estimation-error decomposition. CI runs the same test suite on push and pull request.
+The frontier can also read a local price CSV or download prices through `yfinance`. The committed results and figures use synthetic data, so the repository runs offline. The tests cover portfolio constraints, frontier target returns, Ledoit-Wolf covariance validity, bootstrap variability, Black-Litterman limits and the estimation-error decomposition. CI runs them on push and pull request.
 
-## What this project demonstrates
+## Notes
 
-- constrained optimisation;
-- covariance and expected-return estimation;
-- optimizer sensitivity / estimation risk;
-- paired Monte Carlo benchmarking against known truth;
-- bootstrap stability analysis;
-- Ledoit-Wolf covariance shrinkage;
-- Black-Litterman reverse optimisation and view blending;
-- scenario simulation;
-- separating attractive in-sample geometry from defensible out-of-sample claims.
-
-See [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md) for the equations and experiment design.
+The Black-Litterman code works in excess-return space, and the posterior is converted back to total returns before the Sharpe optimiser subtracts the risk-free rate. An earlier version subtracted the risk-free rate twice and failed its own zero-view check. The market weights and the view are illustrative assumptions. Equations and experiment design are in [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md).
 
 ## Licence
 
